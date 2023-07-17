@@ -1,0 +1,41 @@
+---
+title: "The European freshwater landscape and hotspot areas of mass effects and regional connectivity"
+author: "David Cunillera-Montcusí, Jordi Bou, Thomas Mehner, Sandra Brucet, Matías Arim and Ana I. Borthagaray"
+subtitle: "Diversity and distributions - DOI: https://doi.org/10.1111/ddi.13711"
+date: "Submitted - 31/10/2022"
+output: rmdformats::downcute
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+  encoding=encoding,
+  output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T,
+                      results = "hide",
+                      message=FALSE, warning=FALSE)
+```
+
+# **Script introduction**
+
+Find in the following lines the code corresponding to the analysis of the article: The European freshwater landscape and hotspot areas of mass effects and regional connectivity.
+
+All the suplementary material images, original scripts and used functions can be found in:
+
+Article DOI: https://doi.org/10.1111/ddi.13711
+
+Direct link to repositpory: https://github.com/Metacommunity-Lab/DD_PanEU_Waterscape
+
+To properly follow the following steps we recommend to read the entire work to better contextualize the use and limitations of the current codes and functions. 
+
+## *The scripts can be found in the following repository*
+
+Link to the function: https://github.com/Metacommunity-Lab/DD_PanEU_Waterscape
+
+Link to supplementary material: https://doi.org/10.1111/ddi.13711
+
+
+
+
+
