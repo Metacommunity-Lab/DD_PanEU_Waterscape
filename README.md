@@ -10,6 +10,10 @@ David Cunillera-Montcusí1,2,3, Jordi Bou4, Thomas Mehner5, Sandra Brucet6,7, Ma
 6. Aquatic Ecology Group, University of Vic –Central University of Catalonia, Vic, Spain
 7. ICREA, Catalan Institution for Research and Advanced Studies, Barcelona, Spain
 
+Paper DOI: https://doi.org/10.1111/ddi.13711
+
+A tutorial is available with all the corresponding code at: https://metacommunity-lab.github.io/DD_PanEU_Waterscape/
+
 Abstract
 
 Aim: The maintenance of broad-scale connectivity patterns is suggested as a sustainable strategy for biodiversity preservation. However, explicit approaches for quantifying the functional role of different areas in biogeographic connectivity has been elusive. Freshwaters are spatially structured ecosystems critically endangered because of human activities and global change, demanding connectivity-based approaches for their conservation. Mass effects—the increase in local diversity by immigration—and corridor effects—the connections with distant communities—are basic and relevant mechanisms connecting diversity with landscape configuration. Here we identified freshwater hotspots areas for mass and corridor effects across Europe.
