@@ -1,7 +1,7 @@
 # The European freshwater landscape and hotspot areas of mass effects and regional connectivity
 
-The European freshwater landscape and hotspot areas of mass effects and regional connectivity
-David Cunillera-Montcusí1,2,3*, Jordi Bou4, Thomas Mehner5, Sandra Brucet6,7, Matías Arim1, Ana I. Borthagaray1,*,&
+David Cunillera-Montcusí1,2,3, Jordi Bou4, Thomas Mehner5, Sandra Brucet6,7, Matías Arim1, Ana I. Borthagaray1
+
 1. Departamento de Ecología y Gestión Ambiental, Centro Universitario Regional del Este (CURE), Universidad de la República, Tacuarembó s/n, Maldonado, Uruguay.
 2. FEHM-Lab. Section of Ecology, Department of Evolutionary Biology, Ecology and Environmental Sciences. University of Barcelona, Diagonal, 643 (08028 Barcelona, Catalonia/Spain)
 3. GRECO, Institute of Aquatic Ecology, University of Girona, Girona, Spain
