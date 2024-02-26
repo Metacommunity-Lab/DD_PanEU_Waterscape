@@ -52,10 +52,108 @@ In-degree, out-degree and betweenness were estimated for each of the 134,244 spa
 knitr::include_graphics("C:/Users/David CM/Dropbox/H2020/Europa_Ensamble/GitHub repository/Figures to GitHub/Figure_1.png")
 ```
 
+Find below an example of calculation of different centrality metrics for 1 specific ecoregion. 
+
+```{r Values centrality, eval=F}
+## Waterscape of "Unassigned" (EcoR_ID 0)
+load("Waterscape_Europa_EcoR.RData")
+
+##########
+head(M.Europa.J) ## Matrix to be used
+M.Europa.J[which(M.Europa.J$PageName=="AA287"),1:16]
+#################################################
+##### Diviging for each Ecoregion
+unique(M.Europa.J$EcoR_Name)
+unique(M.Europa.J$EcoR_Name)[37]
+
+A<-M.Europa.J[which(M.Europa.J$EcoR_Name== "Unassigned"),]
+dim(A)
+head(A)
+M.Europa.J[which(M.Europa.J$EcoR_ID==0)[1],10]
+
+########################################################################
+library(geosphere); library(sp); library(stars)  
+coord.xy<-cbind(A$CENTROID_X,A$CENTROID_Y)
+colnames(coord.xy)<-c("CENTROID_X "," CENTROID_Y")
+FreshW_coord <- st_as_sf(as.data.frame(coord.xy),coords = c("CENTROID_X "," CENTROID_Y")) # Transforming to sf format
+FreshW_coord_spatial <- as(FreshW_coord, "Spatial") # Convert to "old" format to caluclate to distances
+#### Calculate the distance matrix (in METRES!!!) from a lat/long values 
+aa_en_metros<- distm(FreshW_coord_spatial@coords,FreshW_coord_spatial@coords, fun = distGeo) 
+
+### plot
+par(mar=c(2.5,2.5,1.5,1.5),bty="l",cex=1.8)
+plot(M.Europa.J$CENTROID_Y~M.Europa.J$CENTROID_X,cex=0.1,col="light gray",pch=15)
+points(A$CENTROID_Y~A$CENTROID_X,cex=0.1,col="orange",pch=15)
+
+# D50.4 - D50 (distance at which dispersal prob. is 0.5) is 4 KM
+rm(D50)
+D50<-4
+b.mig=(-log(.5)/(D50))
+par(mar=c(4,4,.5,.5),cex=1.4,bty="l")
+plot(exp(-b.mig*(0:200))~I(0:200),ylim=c(0,1),type="l",lwd=4,col="dark green",ylab="Dispersal probability",xlab="Distance (Km)")
+abline(h=0.5)
+exp(-b.mig*4)
+b.mig_D50.4<-b.mig
+rm(b.mig)
+
+# Separating for the different types of freshwater habitats
+dim(aa_en_metros)
+exp(-b.mig_D50.4*(aa_en_metros/1000))*A$J.efimero->mm.efimero.D50.4 ## 1
+exp(-b.mig_D50.4*(aa_en_metros/1000))*A$J.temporal->mm.temporal.D50.4 ## 2
+exp(-b.mig_D50.4*(aa_en_metros/1000))*A$J.permanente->mm.permanente.D50.4 ## 3
+exp(-b.mig_D50.4*(aa_en_metros/1000))*A$J.freshwater->mm.fw.D50.4 ## 
+
+id.fw<-which(A$FRESHWATER!=0); length(id.fw)### 169 are freshwater
+id.efimero<-which(A$FRESHWATER.efimeros!=0); length(id.efimero)### 154 fw ephemeral
+id.temporal<-which(A$FRESHWATER.temporales!=0); length(id.temporal)### 161 temporary
+id.permanentes<-which(A$FRESHWATER.permanentes!=0); length(id.permanentes) ### 142 fw permanent
+
+# Degree calculation
+detach("package:igraph", unload = TRUE)
+library("sna") 
+# For degree we consider the weight of each node as its own habitat size 
+# Ephemeral
+degree(mm.efimero.D50.4[id.efimero,id.efimero],gmode="digraph",cmode="indegree")->grado.in.efimero.D50.4 
+degree(mm.efimero.D50.4[id.efimero,id.efimero],gmode="digraph",cmode="outdegree")->grado.out.efimero.D50.4
+colnames(A)
+# Temporal 
+degree(mm.temporal.D50.4[id.temporal,id.temporal],gmode="digraph",cmode="indegree")->grado.in.temporal.D50.4
+degree(mm.temporal.D50.4[id.temporal,id.temporal],gmode="digraph",cmode="outdegree")->grado.out.temporal.D50.4
+# Permanent
+degree(mm.permanente.D50.4[id.permanentes,id.permanentes],gmode="digraph",cmode="indegree")->grado.in.permanente.D50.4
+degree(mm.permanente.D50.4[id.permanentes,id.permanentes],gmode="digraph",cmode="outdegree")->grado.out.permanente.D50.4
+# All freshwaters
+degree(mm.fw.D50.4[id.fw,id.fw],gmode="digraph",cmode="indegree")->grado.in.fw.D50.4
+degree(mm.fw.D50.4[id.fw,id.fw],gmode="digraph",cmode="outdegree")->grado.out.fw.D50.4
+
+# Betweenness calculation
+detach("package:sna", unload = TRUE)
+library(igraph) 
+# For betweenness we estimate the igraph and consider the weights as the distances among sites (1/dist) 
+graph.adjacency(1/(mm.efimero.D50.4[id.efimero,id.efimero]),mode="directed",weighted = TRUE)->g0.efimero.D50.4
+graph.adjacency(1/(mm.temporal.D50.4[id.temporal,id.temporal]),mode="directed",weighted = TRUE)->g0.temporal.D50.4
+graph.adjacency(1/(mm.permanente.D50.4[id.permanentes,id.permanentes]),mode="directed",weighted = TRUE)->g0.permanente.D50.4
+graph.adjacency(1/(mm.fw.D50.4[id.fw,id.fw]),mode="directed",weighted = TRUE)->g0.fw.D50.4
+
+##  weighted betweenness centrality per freshwater
+# Ephemeral
+betweenness(g0.efimero.D50.4,directed = TRUE)->bc.efimero.D50.4 
+# Temporal 
+betweenness(g0.temporal.D50.4,directed = TRUE)->bc.temporal.D50.4
+# Permanent
+betweenness(g0.permanente.D50.4,directed = TRUE)->bc.permanente.D50.4
+# All 
+betweenness(g0.fw.D50.4,directed = TRUE)->bc.fw.D50.4
+```
+
+After carrying these analysis for all ecoregion we obtained the CentralityResults.RData where all the centrality metrics have been calculated for each ecoregino. The following lines contain some examples of code to plot the current results and the final figures obtained in the paper. 
+
+Also, find in the scripts Centrlaity_calculatino and LogRatio_calculation the specific lines for calculating LogRatio results that conformed Figure 4 of these papers. 
+
+
 ```{r Charging dataset , eval=F}
 ##### ##### ##### #####  Loading data ##### ##### ##### ##### 
-load("Paisajes_Ensamble_Europa.RData")
-
+load("CentralityResults.RData")
 # Complete matrix with all the values for each freshwater type: EF(1).T(2).P(3) and Land (0)
 M.final.UK # Values obtained for the Ecoregion corresponding to the UK
 
